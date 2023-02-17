@@ -1,0 +1,37 @@
+server:
+  port: 19090
+spring:
+  application:
+    name: shop_gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://192.168.244.128:8848/
+    gateway:
+      discovery:
+        locator:
+          enabled: true #开启自动发现
+          lower-case-service-id: true #服务名称转换为小写
+      globalcors:
+        cors-configurations:
+          '[/**]': # 匹配所有请求
+            allowedOrigins: "*" #跨域处理 允许所有的域
+            allowedMethods: # 支持的方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
+      httpclient:
+        # 为Netty HttpClient启用监听调试，默认：false
+        wiretap: true
+        httpserver:
+          # 为Netty HttpServer开启监听debugging模式，默认：false
+          wiretap: true
+    sentinel: #限流配置
+      transport:
+        dashboard: localhost:8080
+      scg:
+        fallback:
+          mode: response
+          response-status: 426
+          response-body: error request
